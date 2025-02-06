@@ -12,14 +12,11 @@
         body {
         margin: 0;
         }
-        div {
+        img{
         width: 100vw;
         height: 100vh;
         object-fit: cover;
         position: fixed;
-        background-position: center;
-        background-size: cover;
-        top: 0;
         }
         main {
         height: 300dvh;
@@ -45,7 +42,6 @@
         margin: 0 auto;
         height: auto;
         margin-bottom: 30px;
-        
         }
     }
     
@@ -62,31 +58,21 @@
     </style>
 
     <script type="module">
+        import { images } from './images.js'
     
     const main = document.querySelector('main')
-    const img = document.querySelector('#img')
-    const MAX_FRAMES = 150;
+    const div = document.querySelector('div')
+    const MAX_FRAMES = 151;
     let currentFrame = 0;
 
-    function preLoadImages(){   
-        Array.from({ length: MAX_FRAMES }, (_, index) => {
-        const id = `${(index + 1).toString().padStart(3, '0')}` 
-        const src = `./frames/moto-${id}.webp`
-    
-        const img = new Image()
-        img.src = src     
-        })
-    }
-
-    preLoadImages()
-
     function updateImage (frame = 0) {
-        const id = `${(frame + 1).toString().padStart(3, '0')}` 
-        const src = `./frames/moto-${id}.webp`
+        const src = images[frame].p
         // img.src = src 
-        img.style.backgroundImage = `url('${src}')`
+        img.style.background = `url('${src}')`
     }
 
+    //iniciar con la primer imagen
+    const img = document.createElement('img')
     // append img to main
 main.appendChild(img)
 updateImage(currentFrame)
@@ -131,7 +117,6 @@ updateImage(currentFrame)
         <header>
             <img src="./frames/logo.png" alt="Ichiban - Your Way To Freedom">
         </header>
-        <div id="img"></div>
     </main>  
 </body>
 </html>
