@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 🏍️ Moto Scroll</title>
+
+    <style>
+        *, *::before, *::after{
+            box-sizing: border-box;
+        }
+        body {
+        margin: 0;
+        }
+        div {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        position: fixed;
+        background-position: center;
+        background-size: cover;
+        top: 0;
+        }
+        main {
+        height: 300dvh;
+        }
+        header{
+        background: linear-gradient(40deg, #ba3816, #a41705 40%);
+        width: 400px;
+        height: 300px;
+        border-radius: 1000px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        margin-top: -230px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        animation: slideInDown 1s ease-out;
+        
+        img {
+        width: 130px;
+        margin: 0 auto;
+        height: auto;
+        margin-bottom: 30px;
+        
+        }
+    }
+    
+    @keyframes slideInDown {
+        from {
+        transform: translate3d(-50%, -100%, 0);
+        opacity: 0;
+        }
+        to {
+        transform: translate3d(-50%, 0, 0);
+        opacity: 1;
+        }
+    }
+    </style>
+
+    <script type="module">
+    
+    const main = document.querySelector('main')
+    const img = document.querySelector('#img')
+    const MAX_FRAMES = 150;
+    let currentFrame = 0;
+
+    function preLoadImages(){   
+        Array.from({ length: MAX_FRAMES }, (_, index) => {
+        const id = `${(index + 1).toString().padStart(3, '0')}` 
+        const src = `./frames/moto-${id}.webp`
+    
+        const img = new Image()
+        img.src = src     
+        })
+    }
+
+    preLoadImages()
+
+    function updateImage (frame = 0) {
+        const id = `${(frame + 1).toString().padStart(3, '0')}` 
+        const src = `./frames/moto-${id}.webp`
+        // img.src = src 
+        img.style.backgroundImage = `url('${src}')`
+    }
+
+    // append img to main
+main.appendChild(img)
+updateImage(currentFrame)
+
+    // altura maxima del scroll
+    let maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+
+    window.addEventListener('resize', () => {
+    maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    })
+
+    let lastFrameUpdate = 0;
+    
+    window.addEventListener('scroll', () =>{
+
+        if (Date.now() -  lastFrameUpdate <= 1) return true
+
+        lastFrameUpdate = Date.now()
+        // Posicion actual del scroll
+            const scrollPosition = window.scrollY
+        //Calcular el porcentaje del scroll
+            const scrollFraction = scrollPosition / maxScroll;
+        // Que frame le toca?
+            const frame = Math.floor(scrollFraction * MAX_FRAMES)
+
+            // nos evitamos algo de trabajo cuando al hacer scroll, el frame que le toca es el mismo
+
+            if(currentFrame !== frame){
+            updateImage(frame)
+            currentFrame = frame
+        }
+        
+             
+    });
+
+    </script>
+</head>
+
+
+<body>
+    <main>
+        <header>
+            <img src="./frames/logo.png" alt="Ichiban - Your Way To Freedom">
+        </header>
+        <div id="img"></div>
+    </main>  
+</body>
+</html>
